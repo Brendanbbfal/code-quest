@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090b16">
+<title>Code Quest: Hacker Edition</title>
+<style>
+:root{--bg:#090b16;--panel:#11162a;--panel2:#171d35;--text:#f4f7ff;--muted:#9da7c2;--accent:#62f5b0;--accent2:#7c6cff;--danger:#ff5f7a;--gold:#ffd166}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 20% 0%,#1a2144 0,#090b16 45%);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+button{font:inherit} .app{max-width:720px;margin:auto;padding:16px 16px 30px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.brand{font-weight:900;letter-spacing:.5px}.brand small{display:block;color:var(--muted);font-weight:600;font-size:11px}
+.stats{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.pill{background:#141a2f;border:1px solid #28304e;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800}
+.hero{position:relative;overflow:hidden;border:1px solid #293152;background:linear-gradient(145deg,#151c38,#101326);border-radius:24px;padding:20px;box-shadow:0 15px 50px #0007}
+.hero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:#62f5b01c;right:-60px;top:-70px;filter:blur(4px)}
+.hero h1{margin:0 0 6px;font-size:29px}.hero p{margin:0;color:var(--muted);line-height:1.45}
+.robot{font-size:62px;display:inline-block;animation:float 2.4s ease-in-out infinite;filter:drop-shadow(0 0 14px #62f5b077)}
+@keyframes float{50%{transform:translateY(-9px) rotate(2deg)}} @keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.card{margin-top:14px;background:var(--panel);border:1px solid #252d4b;border-radius:20px;padding:16px}
+.progress{height:9px;background:#080b15;border-radius:99px;overflow:hidden;margin:10px 0}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),#55d8ff);transition:width .5s}
+.mission{font-size:12px;color:var(--accent);font-weight:900;text-transform:uppercase;letter-spacing:1px}
+h2{margin:6px 0 8px;font-size:22px} .prompt{color:#dbe2f6;line-height:1.5}
+.code{background:#070a12;border:1px solid #242b43;border-radius:14px;padding:13px;margin:12px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#a9ffd7;white-space:pre-wrap}
+.answers{display:grid;gap:10px}.answer{background:var(--panel2);border:1px solid #303958;color:var(--text);border-radius:14px;padding:13px;text-align:left;cursor:pointer;transition:.18s}.answer:hover{transform:translateY(-2px);border-color:#6874a2}.answer:disabled{cursor:default;opacity:.95}
+.good{border-color:#43e09a!important;background:#123326!important}.bad{border-color:#ff5f7a!important;background:#351521!important}
+.btnrow{display:flex;gap:9px;margin-top:12px}.primary,.secondary{flex:1;border:0;border-radius:14px;padding:13px;font-weight:900;cursor:pointer}.primary{background:var(--accent);color:#07110c}.secondary{background:#252d4b;color:white}
+.hidden{display:none}.toast{min-height:24px;margin-top:10px;font-weight:800}.toast.goodtxt{color:var(--accent)}.toast.badtxt{color:var(--danger)}
+.map{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}.world{padding:14px 8px;border-radius:16px;border:1px solid #293152;background:#12172b;text-align:center}.world strong{display:block}.world span{font-size:12px;color:var(--muted)}
+.badges{display:flex;gap:7px;flex-wrap:wrap}.badge{border:1px solid #333c5c;border-radius:12px;padding:8px;background:#12172b;font-size:12px}
+#confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden}.piece{position:absolute;width:8px;height:14px;animation:fall 1.2s linear forwards}@keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:0}}
+.modal{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;padding:20px;z-index:5}.modalbox{max-width:520px;width:100%;background:#11162a;border:1px solid #343d61;border-radius:22px;padding:22px}.modalbox h2{margin-top:0}
+.small{font-size:12px;color:var(--muted);line-height:1.5}
+input{width:100%;padding:13px;border-radius:12px;border:1px solid #303958;background:#080b15;color:white;margin:8px 0}
+@media(min-width:650px){.app{padding-top:28px}.answers{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="confetti"></div>
+<div class="app">
+  <div class="top">
+    <div class="brand">⚡ CODE QUEST <small>HACKER EDITION • PYTHON</small></div>
+    <div class="stats">
+      <div class="pill">⭐ <span id="xp">0</span> XP</div>
+      <div class="pill">🪙 <span id="coins">0</span></div>
+      <div class="pill">🔥 <span id="streak">1</span></div>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="robot">🤖</div>
+    <h1>Hack. Learn. Level Up.</h1>
+    <p>Help ROBO escape the Neon Grid by learning real Python one tiny mission at a time.</p>
+  </section>
+
+  <section class="card">
+    <div class="mission" id="mission">Mission 1 • The First Door</div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <h2 id="title">Wake Up ROBO</h2>
+    <div class="prompt" id="prompt"></div>
+    <div class="code hidden" id="code"></div>
+    <div class="answers" id="answers"></div>
+    <div class="toast" id="toast"></div>
+    <div class="btnrow">
+      <button class="secondary" id="hint">💡 Hint</button>
+      <button class="primary hidden" id="next">Next Mission →</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="mission">Your HQ</div>
+    <h2>🌐 Neon Grid</h2>
+    <div class="map">
+      <div class="world"><strong>🟢 Boot Camp</strong><span>5 missions</span></div>
+      <div class="world"><strong>🔒 Cyber City</strong><span>Unlock at Lv 3</span></div>
+      <div class="world"><strong>👾 AI Fortress</strong><span>Boss world</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="mission">Achievements</div>
+    <div class="badges" id="badges"></div>
+  </section>
+</div>
+
+<div class="modal hidden" id="welcome">
+  <div class="modalbox">
+    <div style="font-size:48px">🕵️‍♂️🤖</div>
+    <h2>Welcome to Code Quest</h2>
+    <p class="prompt">You're the hacker. ROBO is your sidekick. We start ridiculously easy, then slowly turn you into a real Python coder.</p>
+    <input id="player" placeholder="Hacker name (optional)" maxlength="18">
+    <button class="primary" id="start">Start Mission 🚀</button>
+    <p class="small">Progress is saved on this phone/browser. No account required.</p>
+  </div>
+</div>
+
+<script>
+const missions=[
+ {t:"Wake Up ROBO",p:"ROBO is asleep. Which command would tell a computer to display a message?",code:"print(\"Wake up, ROBO!\")",a:["say(\"Wake up, ROBO!\")","print(\"Wake up, ROBO!\")","show(\"Wake up, ROBO!\")","talk(\"Wake up, ROBO!\")"],ok:1,h:"Python uses print() to display information."},
+ {t:"Open the Gate",p:"A security gate needs the number 3. Which variable stores that number?",code:"___ = 3",a:["gate = 3","3 = gate","number == 3","gate : 3"],ok:0,h:"A variable is a name that stores a value. Try: name = value."},
+ {t:"Choose Your Path",p:"ROBO must check whether his battery is greater than 20. Which condition is correct?",code:"battery = 75\nif ______:\n    print(\"Go!\")",a:["battery > 20","battery = 20","battery < 20","battery + 20"],ok:0,h:"The > symbol means 'greater than'."},
+ {t:"Loop the Lasers",p:"There are 3 lasers. Which loop repeats the command exactly 3 times?",code:"for i in range(___):\n    dodge()",a:["1","2","3","4"],ok:2,h:"range(3) gives three turns: 0, 1, 2."},
+ {t:"Boss Door",p:"The boss door opens only if the password is correct. Fill in the missing comparison.",code:"password = \"ROBO\"\nif password ___ \"ROBO\":\n    print(\"ACCESS GRANTED\")",a:["=","==","!=","=>"],ok:1,h:"== checks whether two values are equal. = assigns a value."}
+];
+let state=JSON.parse(localStorage.getItem("codeQuestSave")||"null")||{xp:0,coins:0,streak:1,mission:0,done:[],badges:[],name:""};
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem("codeQuestSave",JSON.stringify(state))}
+function level(){return Math.floor(state.xp/100)+1}
+function renderStats(){$("xp").textContent=state.xp;$("coins").textContent=state.coins;$("streak").textContent=state.streak;$("bar").style.width=((state.mission%missions.length)/missions.length*100)+"%"}
+function renderBadges(){
+ const all=[["🎯","First Hack",state.done.length>=1],["🧠","Bug Hunter",state.done.length>=3],["🏆","Boot Camp Champ",state.done.length>=5],["⚡","Level 2",level()>=2],["🔥","On Fire",state.streak>=3]];
+ $("badges").innerHTML=all.map(x=>`<span class="badge" style="opacity:${x[2]?1:.35}">${x[0]} ${x[1]}</span>`).join("");
+}
+function confetti(){
+ const box=$("confetti"); for(let i=0;i<45;i++){let e=document.createElement("i");e.className="piece";e.style.left=Math.random()*100+"%";e.style.top="-20px";e.style.animationDelay=Math.random()*.3+"s";e.style.transform=`rotate(${Math.random()*360}deg)`;e.style.background=["#62f5b0","#7c6cff","#ffd166","#ff5f7a","#55d8ff"][i%5];box.appendChild(e);setTimeout(()=>e.remove(),1600)}
+}
+function loadMission(){
+ const m=missions[state.mission%missions.length]; $("mission").textContent=`Mission ${state.mission+1} • ${state.mission<5?"Boot Camp":"Cyber City"}`;$("title").textContent=m.t;$("prompt").textContent=m.p;$("code").textContent=m.code;$("code").classList.remove("hidden");$("toast").textContent="";$("toast").className="toast";$("next").classList.add("hidden");$("hint").classList.remove("hidden");
+ $("answers").innerHTML=m.a.map((x,i)=>`<button class="answer" data-i="${i}">${x}</button>`).join("");
+ document.querySelectorAll(".answer").forEach(b=>b.onclick=()=>answer(+b.dataset.i));
+ renderStats();renderBadges();
+}
+function answer(i){
+ const m=missions[state.mission%missions.length];const btns=[...document.querySelectorAll(".answer")];btns.forEach(b=>b.disabled=true);
+ if(i===m.ok){btns[i].classList.add("good");$("toast").textContent="ACCESS GRANTED! +50 XP +10 coins 🎉";$("toast").className="toast goodtxt";state.xp+=50;state.coins+=10;state.done.push(state.mission);state.streak++;confetti()}
+ else{btns[i].classList.add("bad");$("toast").textContent="ACCESS DENIED 😅 Try the hint and go again."; $("toast").className="toast badtxt";state.streak=Math.max(1,state.streak-1);btns[m.ok].classList.add("good")}
+ $("next").classList.remove("hidden");$("hint").classList.add("hidden");save();renderStats();renderBadges();
+}
+$("next").onclick=()=>{state.mission++;save();loadMission()}
+$("hint").onclick=()=>{const m=missions[state.mission%missions.length];$("toast").textContent="💡 "+m.h;$("toast").className="toast"}
+$("start").onclick=()=>{state.name=$("player").value.trim();save();$("welcome").classList.add("hidden")}
+if(!localStorage.getItem("codeQuestSave")) $("welcome").classList.remove("hidden");
+loadMission();
+</script>
+</body>
+</html>
